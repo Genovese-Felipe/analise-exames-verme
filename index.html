@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Cross-Domain Avançada: Patofisiologia Urogenital Felina</title>
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --danger-color: #ff6b6b;
+            --warning-color: #ffa502;
+            --success-color: #4ade80;
+            --info-color: #3742fa;
+            --light-bg: #f5f7fa;
+            --dark-text: #333;
+            --light-text: #fff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            color: var(--dark-text);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: var(--light-text);
+            margin-bottom: 30px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tab-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--light-text);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .tab-button:hover, .tab-button.active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .svg-container, .chart-container {
+            background: linear-gradient(135deg, var(--light-bg) 0%, #c3cfe2 100%);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .interactive-diagram {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .diagram-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+
+        .organ-part {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .organ-part:hover, .timeline-point:hover, .flow-step:hover {
+            filter: brightness(1.1) drop-shadow(0 0 8px currentColor);
+            transform: scale(1.05);
+            transform-origin: center;
+        }
+
+        .info-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            max-width: 280px;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transform: translateY(10px);
+        }
+
+        .info-tooltip.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pathology-indicator {
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { r: 6; opacity: 0.9; }
+            70% { r: 12; opacity: 0.3; }
+            100% { r: 6; opacity: 0.9; }
+        }
+
+        .molecular-animation {
+            width: 100%;
+            height: 300px;
+            background: radial-gradient(circle, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .molecule {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(20px, -30px); }
+            50% { transform: translate(-10px, 20px); }
+            75% { transform: translate(30px, 10px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .stats-visualization {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .circle-progress-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .circle-progress {
+            transform: rotate(-90deg);
+        }
+
+        .circle-bg { fill: none; stroke: #e5e7eb; stroke-width: 12; }
+        .circle-fill {
+            fill: none;
+            stroke-width: 12;
+            stroke-linecap: round;
+            transition: stroke-dasharray 1.5s ease-in-out;
+        }
+
+        .stat-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .flow-arrow {
+            stroke: var(--primary-color);
+            stroke-width: 3;
+            fill: none;
+            marker-end: url(#arrowhead);
+            opacity: 0.7;
+        }
+
+        @media (max-width: 992px) {
+            .interactive-diagram {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .nav-tabs { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 Análise Cross-Domain Interativa</h1>
+            <p>Patofisiologia Urogenital Felina - Um Estudo de Caso Visual</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('anatomy', event)">🫁 Anatomia</button>
+            <button class="tab-button" onclick="showTab('pathophysiology', event)">🧬 Patofisiologia</button>
+            <button class="tab-button" onclick="showTab('diagnostics', event)">🔍 Diagnósticos</button>
+            <button class="tab-button" onclick="showTab('treatment', event)">💊 Tratamento</button>
+            <button class="tab-button" onclick="showTab('prognosis', event)">📈 Prognóstico</button>
+        </div>
+
+        <!-- 1. Anatomia Interativa -->
+        <div id="anatomy" class="content-section active">
+            <h2>🫁 Anatomia Interativa e Achados Ultrassonográficos</h2>
+            <div class="interactive-diagram">
+                <div class="svg-container">
+                    <svg class="anatomy-svg" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+                                <feMerge> 
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <path d="M100 50 Q150 20 300 30 Q450 40 500 80 Q550 120 560 200 Q570 280 540 350 Q500 420 400 450 Q300 460 200 450 Q100 440 50 350 Q0 260 20 150 Q40 80 100 50 Z" fill="rgba(236, 240, 241, 0.3)" stroke="#bdc3c7" stroke-width="1"/>
+                        <g id="kidney-left-group" class="organ-part" data-organ="kidney-left">
+                            <ellipse cx="230" cy="180" rx="35" ry="55" fill="#c0392b"/>
+                            <circle class="pathology-indicator" cx="230" cy="180" r="6" fill="var(--warning-color)"/>
+                        </g>
+                        <g id="kidney-right-group" class="organ-part" data-organ="kidney-right">
+                            <ellipse cx="370" cy="180" rx="35" ry="55" fill="#c0392b"/>
+                            <circle class="pathology-indicator" cx="370" cy="180" r="6" fill="var(--warning-color)"/>
+                        </g>
+                        <path d="M255 225 Q280 280 300 310" stroke="#ecf0f1" stroke-width="4" fill="none"/>
+                        <path d="M345 225 Q320 280 300 310" stroke="#ecf0f1" stroke-width="4" fill="none"/>
+                        <g id="bladder-group" class="organ-part" data-organ="bladder">
+                            <ellipse cx="300" cy="350" rx="70" ry="50" fill="#2980b9"/>
+                            <circle class="pathology-indicator" cx="300" cy="350" r="8" fill="var(--danger-color)"/>
+                        </g>
+                        <g id="hernia-group" class="organ-part" data-organ="hernia">
+                            <circle cx="450" cy="380" r="20" fill="#f39c12"/>
+                        </g>
+                        <g class="measurements" pointer-events="none" font-size="12px" fill="#333">
+                            <line x1="195" y1="180" x2="265" y2="180" stroke="#fff" stroke-dasharray="2,2"/>
+                            <text x="230" y="170" text-anchor="middle" fill="#fff">3.87cm</text>
+                            <line x1="270" y1="350" x2="330" y2="350" stroke="#fff" stroke-dasharray="2,2"/>
+                            <text x="300" y="340" text-anchor="middle" fill="#fff">0.67cm</text>
+                        </g>
+                    </svg>
+                </div>
+                <div class="diagram-panel">
+                    <h3>Informações do Órgão</h3>
+                    <div id="organ-details">
+                        <p>Passe o mouse ou clique em um órgão para ver os detalhes do caso.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <h3>Indicadores de Severidade</h3>
+                <div class="stats-visualization">
+                    <div>
+                        <h4>Espessamento Vesical</h4>
+                        <div class="circle-progress-container">
+                            <svg class="circle-progress" viewBox="0 0 100 100">
+                                <circle class="circle-bg" cx="50" cy="50" r="45"/>
+                                <circle class="circle-fill" cx="50" cy="50" r="45" stroke="var(--danger-color)" data-progress="85"/>
+                            </svg>
+                            <div class="stat-text"><span style="font-size: 24px;">85%</span><br>Severo</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Comprometimento Renal</h4>
+                        <div class="circle-progress-container">
+                            <svg class="circle-progress" viewBox="0 0 100 100">
+                                <circle class="circle-bg" cx="50" cy="50" r="45"/>
+                                <circle class="circle-fill" cx="50" cy="50" r="45" stroke="var(--warning-color)" data-progress="40"/>
+                            </svg>
+                            <div class="stat-text"><span style="font-size: 24px;">40%</span><br>Moderado</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4>Risco da Hérnia</h4>
+                        <div class="circle-progress-container">
+                             <svg class="circle-progress" viewBox="0 0 100 100">
+                                <circle class="circle-bg" cx="50" cy="50" r="45"/>
+                                <circle class="circle-fill" cx="50" cy="50" r="45" stroke="var(--success-color)" data-progress="25"/>
+                            </svg>
+                            <div class="stat-text"><span style="font-size: 24px;">25%</span><br>Baixo</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Patofisiologia -->
+        <div id="pathophysiology" class="content-section">
+            <h2>🧬 Cascata Patofisiológica e Timeline Molecular</h2>
+            <div class="molecular-animation">
+                <div class="molecule" style="background: var(--danger-color); top: 20%; left: 10%; animation-delay: 0s;"></div>
+                <div class="molecule" style="background: var(--success-color); top: 60%; left: 30%; animation-delay: -1s;"></div>
+                <div class="molecule" style="background: var(--warning-color); top: 40%; left: 70%; animation-delay: -2s;"></div>
+                <div class="molecule" style="background: var(--danger-color); top: 80%; left: 80%; animation-delay: -3s;"></div>
+                <div class="molecule" style="background: var(--success-color); top: 10%; left: 50%; animation-delay: -4s;"></div>
+            </div>
+            <div class="svg-container">
+                <h3>Timeline da Progressão Patológica</h3>
+                <svg class="timeline-svg" viewBox="0 0 800 150" xmlns="http://www.w3.org/2000/svg">
+                    <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--primary-color)"/></marker></defs>
+                    <line x1="50" y1="75" x2="750" y2="75" stroke="var(--primary-color)" stroke-width="4" marker-end="url(#arrowhead)"/>
+                    <g class="timeline-point" data-phase="1"><circle cx="150" cy="75" r="15" fill="var(--danger-color)"/><text x="150" y="115" text-anchor="middle">Ruptura</text></g>
+                    <g class="timeline-point" data-phase="2"><circle cx="300" cy="75" r="15" fill="var(--warning-color)"/><text x="300" y="115" text-anchor="middle">Inflamação</text></g>
+                    <g class="timeline-point" data-phase="3"><circle cx="450" cy="75" r="15" fill="var(--info-color)"/><text x="450" y="115" text-anchor="middle">Fibrose</text></g>
+                    <g class="timeline-point" data-phase="4"><circle cx="600" cy="75" r="15" fill="var(--secondary-color)"/><text x="600" y="115" text-anchor="middle">Sistêmica</text></g>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 3. Diagnósticos -->
+        <div id="diagnostics" class="content-section">
+            <h2>🔍 Comparativo de Tecnologias Diagnósticas</h2>
+            <div class="chart-container">
+                <h3>Precisão Diagnóstica</h3>
+                <svg class="bar-chart" viewBox="0 0 500 300">
+                    <g class="bar-group" transform="translate(0, 250)">
+                        <rect class="bar" x="80" y="-187.5" width="80" height="187.5" fill="var(--primary-color)" data-value="75%"/>
+                        <rect class="bar" x="200" y="-212.5" width="80" height="212.5" fill="var(--warning-color)" data-value="85%"/>
+                        <rect class="bar" x="320" y="-221.75" width="80" height="221.75" fill="var(--danger-color)" data-value="88.7%"/>
+                    </g>
+                    <line x1="50" y1="250" x2="450" y2="250" stroke="#333" />
+                    <text x="120" y="270" text-anchor="middle">Ultrassom</text>
+                    <text x="240" y="270" text-anchor="middle">Elastografia</text>
+                    <text x="360" y="270" text-anchor="middle">IA + Bio</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 4. Tratamento -->
+        <div id="treatment" class="content-section">
+            <h2>💊 Fluxograma de Tratamento Interativo</h2>
+            <div class="svg-container">
+                <svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg">
+                    <g class="flow-step" data-step="1"><rect x="50" y="170" width="150" height="60" rx="10" fill="var(--primary-color)"/><text x="125" y="205" fill="white" text-anchor="middle">Avaliação Inicial</text></g>
+                    <g class="flow-step" data-step="2"><rect x="250" y="170" width="150" height="60" rx="10" fill="var(--warning-color)"/><text x="325" y="205" fill="white" text-anchor="middle">Estadiamento</text></g>
+                    <g class="flow-step" data-step="3"><rect x="450" y="170" width="150" height="60" rx="10" fill="var(--danger-color)"/><text x="525" y="205" fill="white" text-anchor="middle">Terapia Alvo</text></g>
+                    <g class="flow-step" data-step="4"><rect x="650" y="170" width="150" height="60" rx="10" fill="var(--success-color)"/><text x="725" y="205" fill="white" text-anchor="middle">Monitoramento</text></g>
+                    <path class="flow-arrow" d="M200 200 H 250"/>
+                    <path class="flow-arrow" d="M400 200 H 450"/>
+                    <path class="flow-arrow" d="M600 200 H 650"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 5. Prognóstico -->
+        <div id="prognosis" class="content-section">
+            <h2>📈 Curvas de Sobrevida e Fatores Prognósticos</h2>
+            <div class="chart-container">
+                <h3>Curvas de Sobrevida por Estágio IRIS</h3>
+                <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="50" y1="350" x2="750" y2="350" stroke="#ccc"/>
+                    <line x1="50" y1="50" x2="50" y2="350" stroke="#ccc"/>
+                    <path d="M 50 50 C 250 60, 450 150, 750 300" stroke="var(--success-color)" stroke-width="4" fill="none" class="survival-curve"/>
+                    <path d="M 50 50 C 200 100, 350 250, 500 340" stroke="var(--warning-color)" stroke-width="4" fill="none" class="survival-curve"/>
+                    <path d="M 50 50 C 150 150, 250 300, 350 345" stroke="var(--danger-color)" stroke-width="4" fill="none" class="survival-curve"/>
+                    <text x="650" y="320" fill="var(--success-color)">Estágio 1-2</text>
+                    <text x="400" y="340" fill="var(--warning-color)">Estágio 3</text>
+                    <text x="250" y="345" fill="var(--danger-color)">Estágio 4</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div id="tooltip" class="info-tooltip"></div>
+
+    <script>
+        const organData = {
+            'kidney-left': { name: 'Rim Esquerdo', measurements: '3.87 cm', findings: 'Ecogenicidade cortical elevada.', significance: 'Sugestivo de nefropatia crônica.', status: 'alterado' },
+            'kidney-right': { name: 'Rim Direito', measurements: '3.59 cm', findings: 'Similar ao rim esquerdo.', significance: 'Processo bilateral.', status: 'alterado' },
+            'bladder': { name: 'Bexiga Urinária', measurements: 'Parede espessada (0.67cm)', findings: 'Cistite crônica severa com sedimento.', significance: 'Principal foco inflamatório.', status: 'patológico' },
+            'hernia': { name: 'Hérnia Perineal', measurements: '0.64 cm', findings: 'Conteúdo gorduroso.', significance: 'Achado incidental, baixo risco.', status: 'benigno' }
+        };
+
+        function showTab(tabName, event) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            
+            // FIX: Use event.currentTarget to safely add the active class
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+            
+            const newActiveSection = document.getElementById(tabName);
+            const charts = newActiveSection.querySelectorAll('.circle-fill, .bar, .survival-curve');
+            if (charts.length > 0) {
+                setTimeout(() => animateElements(charts), 100);
+            }
+        }
+
+        function animateElements(elements) {
+            elements.forEach(el => {
+                if (el.classList.contains('circle-fill')) {
+                    const progress = el.dataset.progress;
+                    const r = el.r.baseVal.value;
+                    const circumference = 2 * Math.PI * r;
+                    const offset = circumference - (progress / 100) * circumference;
+                    el.style.strokeDasharray = `${circumference} ${circumference}`;
+                    el.style.strokeDashoffset = offset;
+                }
+                if (el.classList.contains('bar')) {
+                    const value = el.dataset.value;
+                    el.style.height = value;
+                    const text = document.createElement('div');
+                    text.className = 'bar-value';
+                    text.innerText = value;
+                    el.innerHTML = '';
+                    el.appendChild(text);
+                }
+                if (el.classList.contains('survival-curve')) {
+                    const length = el.getTotalLength();
+                    el.style.strokeDasharray = length;
+                    el.style.strokeDashoffset = length;
+                    setTimeout(() => { el.style.transition = 'stroke-dashoffset 2s ease-in-out'; el.style.strokeDashoffset = 0; }, 200);
+                }
+            });
+        }
+
+        const tooltip = document.getElementById('tooltip');
+        function showTooltip(e, organId) {
+            const data = organData[organId];
+            if (!data) return;
+            tooltip.innerHTML = `<strong>${data.name}</strong><br>${data.findings}`;
+            tooltip.style.left = `${e.pageX + 15}px`;
+            tooltip.style.top = `${e.pageY + 15}px`;
+            tooltip.classList.add('show');
+        }
+
+        function hideTooltip() {
+            tooltip.classList.remove('show');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.organ-part').forEach(el => {
+                const organId = el.dataset.organ;
+                el.addEventListener('mousemove', (e) => showTooltip(e, organId));
+                el.addEventListener('mouseleave', hideTooltip);
+                el.addEventListener('click', () => {
+                    const data = organData[organId];
+                    const detailsPanel = document.getElementById('organ-details');
+                    if (data && detailsPanel) {
+                        detailsPanel.innerHTML = `<h4>${data.name}</h4><p><strong>Achados:</strong> ${data.findings}</p><p><strong>Significado:</strong> ${data.significance}</p>`;
+                    }
+                });
+            });
+            
+            // FIX: Trigger animations for the initially active tab
+            const initialActiveTab = document.querySelector('.content-section.active');
+            if (initialActiveTab) {
+                const charts = initialActiveTab.querySelectorAll('.circle-fill, .bar, .survival-curve');
+                if (charts.length > 0) {
+                    setTimeout(() => animateElements(charts), 100);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
